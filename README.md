@@ -4,12 +4,12 @@
 
 # Windows Subsystem for Linux
 
-These are instructions will bring the power of Linux to your Windows computer!
+Let's bring the full power of Linux to your Windows computer!
 
 We will cover everything that's needed to:
 - Install Docker on WSL _without the need of Docker Desktop_
 - Allow the WSL session (and Docker) to run in the background
-- Start WSL (and Docker) after boot
+- Start WSL (and Docker) automatically after reboot
 
 --------------------------------------------------------------------------------------------------
 
@@ -33,8 +33,9 @@ We will cover everything that's needed to:
 
 ## 0. Preface
 
-* Windows Subsystem for Linux is literally the best thing from Microsoft since [Clippy](https://www.cnn.com/2021/07/15/tech/microsoft-clippy-emoji/index.html); for a quick summary see: https://www.youtube.com/watch?v=UMQ5GQix0rs
-* Combined with a Linux CLI Docker that runs locally in the background, you now have the ease of Windows productivity applications alongside your Linux-based development environment
+Windows Subsystem for Linux is literally the best thing from Microsoft since [Clippy](https://www.cnn.com/2021/07/15/tech/microsoft-clippy-emoji/index.html); for a quick summary see: https://www.youtube.com/watch?v=UMQ5GQix0rs
+
+When WSL is combined with Docker that runs locally in the background, you now have the ease of Windows productivity applications alongside a Linux-based development environment
 
 [Back to Top](#table-of-contents)
 
@@ -71,7 +72,7 @@ We will cover everything that's needed to:
 * Ubuntu-20.04    Running         2
 ```
 
-* Otherwise, if you have WSL2 but haven't installed Docker (without Docker Desktop), [skip ahead to here](#3-docker)
+* Otherwise, if you have WSL2 but haven't installed Docker (without Docker Desktop), [skip ahead to here](#3-cli-docker)
 
 ### Installing WSL2 from Scratch
 
@@ -88,8 +89,8 @@ We will cover everything that's needed to:
 > dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 ```
 
-* Restart your computer
-* Download the latest Linux kernel update package and install it: [WSL2 Linux kernel update package for x64 machines](https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi)
+* **Restart your computer**
+* Download the latest Linux kernel update package and install it: [WSL2 Linux kernel update package for x64 machines](https://docs.microsoft.com/en-us/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package)
 * Open PowerShell as Administrator and set WSL version 2 as your default version:
 
 ```powershell
@@ -98,8 +99,8 @@ For information on key differences with WSL 2 please visit https://aka.ms/wsl2
 The operation completed successfully.
 ```
 
-* You can now get a WSL2 Linux distribution from the Microsoft Store like Ubuntu 20.04 LTS:
-   * Some legacy WSL1 distributions cannot run under WSL2
+* You can now get a WSL2 Linux distribution from the Microsoft Store:
+   * [Not all distributions can run under WSL2, Ubuntu 20.04 LTS is fully capable](#wsl2-capable-linux-distributions)
 
 [![.img/fig_02_01.jpg](.img/fig_02_01.jpg)](#nolink)
 
@@ -151,7 +152,7 @@ This message shows that your installation appears to be working correctly.
 ### Configure Docker to Start on WSL Startup
 
 * Add the following lines at the bottom of the file to allow `sudo docker` commands to run in the background and save:
-   * `<USERNAME>` = Your username
+   * Replace "`<USERNAME>`" with you actual username in the file
 
 ```bash
 $ sudo visudo
@@ -203,7 +204,7 @@ $ docker restart nginx_container
 
 [![.img/fig_03_03.jpg](.img/fig_03_03.jpg)](#nolink)
 
-* **This confirms that WSL and Docker are not running in the background when you close the WSL console and end the WSL session**, we will enable running WSL (and Docker) in the background next
+**This confirms that WSL and Docker are not running in the background when you close the WSL console and end the WSL session**, we will enable running WSL (and Docker) in the background next
 
 [Back to Top](#table-of-contents)
 
@@ -244,7 +245,7 @@ $ docker restart nginx_container
 * Settings Tab
    * Unselect "Stop the Task if It Runs Longer Than", click OK
 * **Restart computer**
-* Confirm that WSL is running (as "`wsl`") without starting the WSL console, start PowerShell and run:
+* Without starting the WSL console after reboot, confirm that WSL is running (as "`wsl`") in PowerShell by executing:
 
 ```powershell
 > get-process
@@ -269,7 +270,7 @@ $ docker restart nginx_container
 
 [![.img/fig_04_04.jpg](.img/fig_04_04.jpg)](#nolink)
 
-* **This confirms that the WSL session and Docker are still running in the background even when you close the WSL console**
+### **Congratulations, this confirms that the WSL session and Docker are still running in the background even when you close the WSL console**
 
 [Back to Top](#table-of-contents)
 
@@ -279,7 +280,23 @@ $ docker restart nginx_container
 
 Description | Link
 --- | ---
-Other reasons to use WSL2 over WSL2 | https://docs.microsoft.com/en-us/windows/wsl/compare-versions
+Other reasons to use WSL2 over WSL1 | https://docs.microsoft.com/en-us/windows/wsl/compare-versions
+
+### WSL2-Capable Linux Distributions
+
+* Alpine WSL
+* Debian GNU/Linux
+* Fedora Remix for WSL
+* Kali Linux
+* openSUSE Leap 15.1
+* Pengwin
+* Pengwin Enterprise
+* SUSE Linux Enterprise Server 12 SP5
+* SUSE Linux Enterprise Server 15 SP1
+* Ubuntu
+* Ubuntu 16.04 LTS
+* Ubuntu 18.04 LTS
+* Ubuntu 20.04 LTS
 
 [Back to Top](#table-of-contents)
 
