@@ -20,8 +20,9 @@ We will cover everything that's needed to:
 * [0. Preface](#0-preface)
 * [1. Requirements](#1-requirements)
 * [2. WSL1 vs. WSL2](#2-wsl1-vs-wsl2)
-* [3. CLI Docker](#3-cli-docker)
-* [4. Special WSL Configuration](#4-special-wsl-configuration)
+* [3. WSL2 Internet Access](#3-wsl2-internet-access)
+* [4. CLI Docker](#4-cli-docker)
+* [5. Special WSL Configuration](#5-special-wsl-configuration)
 
 ### Supplemental
 
@@ -43,6 +44,12 @@ When WSL is combined with Docker that runs locally in the background, you now ha
 
 ## 1. Requirements
 
+#### Hardware
+
+* Your CPU must support virtualization and be enabled in the BIOS:
+   * Intel calls this `Intel Virtualization Technology`
+   * AMD calls this `SVM Mode`
+
 #### Windows 10
 
 * Windows Subsystem for Linux (WSL) is a fully supported Microsoft product for Windows 10: https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux
@@ -50,6 +57,11 @@ When WSL is combined with Docker that runs locally in the background, you now ha
 * **WSL2 requires a Windows 10 build version ≥1903 and minor build number ≥1049**
 
 [![.img/fig_01_01.jpg](.img/fig_01_01.jpg)](#nolink)
+
+* You must enable Hyper-V in "Turn Windows features on or off":
+   * NOTE: This example shows that Hyper-V ***cannot*** be turned on due to virtualization being disabled in the firmware (i.e. BIOS)
+
+[![.img/fig_01_02.jpg](.img/fig_01_02.jpg)](#nolink)
 
 ### Command Line Interface (CLI)
 
@@ -99,27 +111,53 @@ For information on key differences with WSL 2 please visit https://aka.ms/wsl2
 The operation completed successfully.
 ```
 
-* You can now get a WSL2 Linux distribution from the Microsoft Store:
+* Proceed to get a WSL2 Linux distribution from the Microsoft Store such as Ubuntu 20.04:
    * [Not all distributions can run under WSL2, Ubuntu 20.04 LTS is fully capable](#wsl2-capable-linux-distributions)
 
 [![.img/fig_02_01.jpg](.img/fig_02_01.jpg)](#nolink)
 
+* Once installed, start the Ubuntu CLI and Windows will finish installation
+* You will need to setup a username and password
+
 ### Upgrading WSL1 to WSL2
 
 * Back up everything you need to into your Windows partition (SSH keys, etc.)
-* Uninstall your current WSL Linux distribution:
+* Uninstall your current WSL Linux distribution in "Apps & features":
 
 [![.img/fig_02_02.jpg](.img/fig_02_02.jpg)](#nolink)
 
 * Now [install WSL2 from scratch](#installing-wsl2-from-scratch)
+* Remember to copy everything back over to your new home directory and change ownership (i.e. `chown`) and permissions (i.e. `chown`) as appropriate
 
 [Back to Top](#table-of-contents)
 
 --------------------------------------------------------------------------------------------------
 
-## 3. CLI Docker
+## 3. WSL2 Internet Access
 
-We will install CLI Docker by itself without the need for Docker Desktop
+* The current release of WSL2 (as of 2022-02-19) may need additional configuration to allow internet connectivity within the CLI
+* Test the following in the WSL2 CLI:
+
+```bash
+$ ping google.com
+```
+
+* If after 10-20 seconds you do not get a response, continue in this section, if you do see a response, move onto section [4. CLI Docker](#4-cli-docker)
+
+### Configuration Changes
+
+* The following instructions should work to configure internet access in WSL2: https://gist.github.com/machuu/7663aa653828d81efbc2aaad6e3b1431
+   * NOTE: If you are routinely behind a VPN, you will definitely need the above configuration
+
+[Back to Top](#table-of-contents)
+
+--------------------------------------------------------------------------------------------------
+
+## 4. CLI Docker
+
+> NOTE: You must have internet working within WSL2 from section [3. WSL2 Internet Access](#3-wsl2-internet-access)
+
+We will now install CLI Docker by itself without the need for Docker Desktop
 
 ### Install and Test Installation
 
@@ -191,6 +229,7 @@ $ docker run -it --rm -d -p 80:80 --name nginx_container nginx
 
 * Now close your WSL console window and this will cause the WSL session to terminate (along with Docker)
 * After a few seconds, refresh the webpage and you will see that it cannot display since the NGINX webserver container is offline:
+   * NOTE: Your browser may be displaying an offline cached version of the unreachable webpage if you do still see the same thing after refresh
 
 [![.img/fig_03_02.jpg](.img/fig_03_02.jpg)](#nolink)
 
@@ -210,7 +249,7 @@ $ docker restart nginx_container
 
 --------------------------------------------------------------------------------------------------
 
-## 4. Special WSL Configuration
+## 5. Special WSL Configuration
 
 * Start Powershell (as Administrator) and create a `vbs` script and open it in notepad:
 
@@ -222,8 +261,8 @@ $ docker restart nginx_container
 * Paste the following in the script for Ubuntu 20.04:
 
 ```powershell
-> set object = createobject("wscript.shell")
-> object.run "wsl.exe --distribution Ubuntu-20.04",0
+set object = createobject("wscript.shell")
+object.run "wsl.exe --distribution Ubuntu-20.04",0
 ```
 
 * Open Task Scheduler and Create Basic Task
