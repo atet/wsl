@@ -59,7 +59,7 @@ When WSL is combined with Docker that runs locally in the background, you now ha
 [![.img/fig_01_01.jpg](.img/fig_01_01.jpg)](#nolink)
 
 * You must enable Hyper-V in "Turn Windows features on or off":
-   * NOTE: This example shows that Hyper-V ***cannot*** be turned on due to virtualization being disabled in the firmware (i.e. BIOS)
+   * NOTE: This example below shows that Hyper-V ***cannot*** be turned on due to virtualization being disabled in the firmware (i.e. BIOS)
 
 [![.img/fig_01_02.jpg](.img/fig_01_02.jpg)](#nolink)
 
@@ -320,6 +320,8 @@ $ docker restart nginx_container
 Description | Link
 --- | ---
 Other reasons to use WSL2 over WSL1 | https://docs.microsoft.com/en-us/windows/wsl/compare-versions
+License for Docker Engine (Apache v2.0) | https://docs.docker.com/engine/#licensing
+License for Docker Desktop (_**not** installed here_) | https://docs.docker.com/subscription/#docker-desktop-license-agreement
 
 ### WSL2-Capable Linux Distributions
 
